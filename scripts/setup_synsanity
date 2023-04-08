@@ -21,9 +21,10 @@ iptables -N synsanity-mitigation || true
 iptables -F synsanity-mitigation
 
 # set up synsanity for each condition name, interface and port we require
-scripts/add_synsanity_rule INPUT synsanity-mitigation-80 eth0 80
-scripts/add_synsanity_rule INPUT synsanity-mitigation-443 eth0 443
+#scripts/add_synsanity_rule INPUT synsanity-mitigation-80 eth0 80
+#scripts/add_synsanity_rule INPUT synsanity-mitigation-443 eth0 443
 
+scripts/add_synsanity_rule INPUT synsanity-mitigation eth0
 
 ## Below are generic synsanity options that are used when mitigation enabled ##
 
