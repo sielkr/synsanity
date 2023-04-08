@@ -4,6 +4,7 @@
 
 WSCALE=10
 TCP_MSS=1436
+INTERFACE="eth0"
 
 # make sure our modules are all available
 modprobe nf_synproxy_core
@@ -24,7 +25,7 @@ iptables -F synsanity-mitigation
 #scripts/add_synsanity_rule INPUT synsanity-mitigation-80 eth0 80
 #scripts/add_synsanity_rule INPUT synsanity-mitigation-443 eth0 443
 
-scripts/add_synsanity_rule INPUT synsanity-mitigation eth0
+scripts/add_synsanity_rule INPUT synsanity-mitigation $INTERFACE
 
 ## Below are generic synsanity options that are used when mitigation enabled ##
 
