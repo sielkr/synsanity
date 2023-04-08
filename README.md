@@ -1,4 +1,4 @@
-# synsanity - DEPRECATED
+# synsanity - DEPRECATED (edited)
 
 This project has been deprecated. GitHub runs a Linux kernel with [lockless listen sockets](https://lwn.net/Articles/659199/) as of 2017.
 
@@ -43,7 +43,7 @@ scripts/setup_synsanity
 
 And check the status of synsanity on a given port:
 ```
-# scripts/nagios_check_synsanity_port 80
+# scripts/nagios_check_synsanity
 SYNSANITY mitigation for port 80 is currently disabled. Everything is OK.
 ```
 
@@ -52,7 +52,7 @@ SYNSANITY mitigation for port 80 is currently disabled. Everything is OK.
 The scripts provided here will set up synsanity on a specific set of public ports specified. The `setup_synsanity` script includes lines like the following:
 
 ```
-add_synsanity_rule INPUT synsanity-mitigation-80 eth0 80
+add_synsanity_rule INPUT synsanity-mitigation eth0
 ```
 
 This hooks synsanity mitigation rules in the iptables `INPUT` chain using a condition called `synsanity-mitigation-80` on packets arriving on the interface `eth0` on port `80`.
@@ -62,8 +62,7 @@ In this case, the condition will be available at `/proc/net/ipt_condition/synsan
 The scripts provided here don't automatically disable mitigation when an attack is over, but rather a nagios check script called `nagios_check_synsanity_port` is provided which shows how to create an alert based on mitigation. Manually enabling or disabling synsanity mitigation on a port is as simple as changing the condition:
 
 ```
-echo 0 > /proc/net/ipt_condition/synsanity-mitigation-80 # disable mitigation on port 80
-echo 1 > /proc/net/ipt_condition/synsanity-mitigation-80 # enable mitigation on port 80
+echo 0 > /proc/net/ipt_condition/synsanity-mitigation # disable mitigation
 ```
 
 ## Contributions
