@@ -5,7 +5,6 @@
 CHAIN=$1
 CONDITION_NAME=$2
 INTERFACE=$3
-PORT=$4
 
 if [ -z $CHAIN ]
 then
@@ -25,12 +24,6 @@ then
   exit 1
 fi
 
-if [ -z $PORT ]
-then
-  echo "Port must be specified."
-  exit 1
-fi
-
 # load all the modules before trying to add rules
 modprobe ipt_SYNSANITY
 modprobe xt_syncookies
@@ -40,14 +33,14 @@ modprobe xt_condition
 # next as a match to trigger that synsanity should handle them. This prevents
 # conntrack from locking on a SYN flood.
 iptables -t raw -I PREROUTING -i $INTERFACE \
-	-p tcp -m tcp --tcp-flags SYN SYN --dport $PORT \
+	-p tcp -m tcp --tcp-flags SYN SYN \
 	-m condition --condition $CONDITION_NAME \
 	-j CT --notrack
 
 # Trigger condition variable when the SYN queue on the LISTEN socket backing
 # this port hits a watermark of 90%
 iptables -t raw -I PREROUTING -i $INTERFACE \
-	-p tcp -m tcp --tcp-flags SYN SYN --dport $PORT \
+	-p tcp -m tcp --tcp-flags SYN SYN \
 	-m condition ! --condition $CONDITION_NAME \
 	-m syncookies --syn-queue-level 90 \
 	-j CONDITION --condition $CONDITION_NAME
@@ -57,6 +50,6 @@ iptables -t raw -I PREROUTING -i $INTERFACE \
 # using synsanity's mitigation rules. Otherwise, we fall back to normal
 # simplistic firewall rules.
 iptables -I $CHAIN -i $INTERFACE \
-	-p tcp -m tcp --dport $PORT \
+	-p tcp -m tcp \
 	-m condition --condition $CONDITION_NAME \
 	-j synsanity-mitigation
