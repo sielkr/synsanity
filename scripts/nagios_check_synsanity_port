@@ -8,25 +8,19 @@ STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
 
-if [ -z $1 ]
-then
-  echo "Port must be provided as an argument!"
-  exit $STATE_UNKNOWN
-fi
-
-if [ ! -f /proc/net/ipt_condition/synsanity-mitigation-"$1" ]
+if [ ! -f /proc/net/ipt_condition/synsanity-mitigation ]
 then
   echo "IPT Condition procfile doesn't exist!"
   exit $STATE_UNKNOWN
 fi
 
-cat /proc/net/ipt_condition/synsanity-mitigation-"$1" | grep -q 0 2>&1
+cat /proc/net/ipt_condition/synsanity-mitigation | grep -q 0 2>&1
 
 if [ $? -eq 0 ]
 then
-  echo "SYNSANITY mitigation for port $1 is currently disabled. Everything is OK."
+  echo "SYNSANITY mitigation is currently disabled. Everything is OK."
   exit $STATE_OK
 else
-  echo "SYNSANITY mitigation for port $1 is currently ENABLED. Put on your DDoS attack hat."
+  echo "SYNSANITY mitigation is currently ENABLED. Put on your DDoS attack hat."
   exit $STATE_CRITICAL
 fi
