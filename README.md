@@ -44,7 +44,7 @@ scripts/setup_synsanity
 And check the status of synsanity on a given port:
 ```
 # scripts/nagios_check_synsanity
-SYNSANITY mitigation for port 80 is currently disabled. Everything is OK.
+SYNSANITY mitigation is currently disabled. Everything is OK.
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ The scripts provided here will set up synsanity on a specific set of public port
 add_synsanity_rule INPUT synsanity-mitigation eth0
 ```
 
-This hooks synsanity mitigation rules in the iptables `INPUT` chain using a condition called `synsanity-mitigation-80` on packets arriving on the interface `eth0` on port `80`.
+This hooks synsanity mitigation rules in the iptables `INPUT` chain using a condition called `synsanity-mitigation` on packets arriving on the interface `eth0`.
 
 In this case, the condition will be available at `/proc/net/ipt_condition/synsanity-mitigation-80` and will defualt to `0`, meaning synsanity is not intercepting packets. By default, when `add_synsanity_rule` sees a watermark of 90% on the SYN receive queue on the receiving socket, it will enable this condition (and the proc file will show `1`), and thus enable synsanity's mitigation on that port.
 
